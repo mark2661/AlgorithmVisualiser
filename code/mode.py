@@ -26,7 +26,7 @@ class Mode(ABC):
     def reset_tile(self, tile: Tile):
         pass
 
-    def get_tile(self):
+    def get_tile(self) -> Tile:
         mouse_pos = pygame.mouse.get_pos()
         for tile in self.grid.tiles:
             if self._cursor_on_tile(mouse_pos, tile):
@@ -38,7 +38,7 @@ class Mode(ABC):
         # add tile back to tile group
         self.grid.tiles.add(tile)
 
-    def _cursor_on_tile(self, mouse_pos: tuple[float, float], tile: Tile):
+    def _cursor_on_tile(self, mouse_pos: tuple[float, float], tile: Tile) -> bool:
         return tile.rect.left <= mouse_pos[0] <= tile.rect.right \
                and tile.rect.top <= mouse_pos[1] <= tile.rect.bottom
 

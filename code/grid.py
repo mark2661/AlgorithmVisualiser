@@ -11,6 +11,7 @@ class Grid:
         self.end_tile = pygame.sprite.GroupSingle()
         self.width, self.height = dimensions
         self.display_surface = pygame.display.get_surface()
+        self.tile_map = dict()
 
         # populate grid
         self.add_tiles()
@@ -18,7 +19,35 @@ class Grid:
     def add_tiles(self):
         for x in range(0, self.width, TILE_WIDTH):
             for y in range(0, self.height, TILE_HEIGHT):
-                Tile((x, y), self.tiles)
+                new_tile = Tile((x, y), self.tiles)
+                # map the tile center coords to the tile object for fast lookup
+                self.tile_map[new_tile.rect.center] = new_tile
+
+    def get_valid_neighbours(self, tile: Tile) -> list[Tile]:
+        center_x, center_y = tile.rect.center
+        valid_neighbours = []
+
+        # up neighbour
+        up_neighbour_center_coords = (center_x , center_y + TILE_HEIGHT)
+        valid_neighbours.append(self.get_tile(up_neighbour_center_coords))
+
+        # down neighbour
+        down_neighbour_center_coords = (center_x , center_y - TILE_HEIGHT)
+        valid_neighbours.append(self.get_tile(down_neighbour_center_coords))
+
+        # left neighbour
+        left_neighbour_center_coords = (center_x - TILE_WIDTH, center_y)
+        valid_neighbours.append(self.get_tile(left_neighbour_center_coords))
+
+        # right neighbour
+        right_neighbour_center_coords = (center_x + TILE_WIDTH, center_y)
+        valid_neighbours.append(self.get_tile(right_neighbour_center_coords))
+
+        # return non wall neighbours only
+        return [neighbour for neighbour in valid_neighbours if neighbour not in self.wall_tiles]
+
+    def get_tile(self, center_pos : tuple[float, float]) -> Tile:
+        return self.tile_map.get(center_pos, None)
 
     def draw(self):
         for tile in self.tiles:
