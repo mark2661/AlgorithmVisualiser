@@ -16,21 +16,25 @@ class EventHandler:
         self.mode = self.modes[self.mode_index]
 
     def process_event(self, event: pygame.event):
+        left_button, center_button, right_button = pygame.mouse.get_pressed()
+
         if event.type == pygame.QUIT:
-            sys.exit()
+            # sys.exit()
+            pass
         elif event.type == pygame.KEYDOWN:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_TAB]:
                 self._change_mode()
                 time.sleep(1)
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            left_button, center_button, right_button = pygame.mouse.get_pressed()
-            if left_button:
-                self.mode.left_click()
+            elif keys[pygame.K_SPACE]:
+                self.grid.run()
 
-            elif right_button:
-                self.mode.right_click()
+        elif left_button:
+            self.mode.left_click()
+
+        elif right_button:
+            self.mode.right_click()
 
     def _change_mode(self):
         self.mode_index = (self.mode_index + 1) % len(self.modes)

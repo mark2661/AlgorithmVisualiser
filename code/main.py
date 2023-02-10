@@ -4,9 +4,12 @@ from settings import *
 from grid import Grid
 from eventHandler import EventHandler
 from debug import debug
+from clock import fpsClock
 
 
 class Game:
+    clock = fpsClock.get_clock()
+
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -16,6 +19,8 @@ class Game:
     def run(self):
         while True:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
                 self.event_handler.process_event(event)
 
             self.screen.fill("black")
@@ -23,6 +28,7 @@ class Game:
             debug(self.event_handler.mode)
 
             pygame.display.update()
+            Game.clock.tick(FPS)
 
 
 if __name__ == "__main__":
