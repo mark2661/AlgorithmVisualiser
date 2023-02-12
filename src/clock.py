@@ -1,7 +1,7 @@
 import pygame
 
 
-class fpsClock:
+class FpsClock:
     # static variables
     clock = None
 
@@ -10,7 +10,7 @@ class fpsClock:
 
     @staticmethod
     def get_clock():
-        if fpsClock.clock is None:
-            fpsClock.clock = pygame.time.Clock()
+        if FpsClock.clock is None:
+            FpsClock.clock = pygame.time.Clock()
 
-        return fpsClock.clock
+        return FpsClock.clock

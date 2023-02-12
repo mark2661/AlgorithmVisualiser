@@ -4,11 +4,11 @@ from settings import *
 from grid import Grid
 from eventHandler import EventHandler
 from debug import debug
-from clock import fpsClock
+from clock import FpsClock
 
 
 class Game:
-    clock = fpsClock.get_clock()
+    clock = FpsClock.get_clock()
 
     def __init__(self):
         pygame.init()

@@ -1,11 +1,11 @@
 import heapq
 import sys
 import math
-from tile import Tile
-from settings import *
+from src.tile import Tile
+from src.settings import *
 import pygame
 import time
-from clock import fpsClock
+from src.clock import FpsClock
 
 
 def heuristic(a, b):
@@ -27,7 +27,7 @@ def a_star(grid, start: Tile, end: Tile):
     visited = set()
     visited.add(id(start))
 
-    clock = fpsClock.get_clock()
+    clock = FpsClock.get_clock()
 
     def draw_best_path(best_path: list[Tile]):
         time.sleep(2)

@@ -1,11 +1,9 @@
-import sys
 import time
 import pygame
 from grid import Grid
-from debug import debug
-from wallMode import WallMode
-from startMode import StartMode
-from endMode import EndMode
+from src.mode import WallMode
+from src.mode import StartMode
+from src.mode import EndMode
 
 
 class EventHandler:

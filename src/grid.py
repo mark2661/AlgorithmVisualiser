@@ -1,11 +1,6 @@
-import sys
-import pygame
-from memory_profiler import profile
-import cProfile
-import pstats
 from settings import *
 from tile import Tile
-from a_star import a_star
+from src.algorithms.a_star import a_star
 
 
 class Grid:
