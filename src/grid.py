@@ -1,5 +1,6 @@
-from settings import *
-from tile import Tile
+from __future__ import annotations
+from src.settings import *
+from src.tile import Tile
 from src.algorithms.a_star import a_star
 
 

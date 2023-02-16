@@ -1,5 +1,6 @@
+from __future__ import annotations
 import pygame
-from settings import *
+from src.settings import *
 
 
 class Tile(pygame.sprite.Sprite):

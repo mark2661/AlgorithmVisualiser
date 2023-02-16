@@ -30,4 +30,3 @@ def test_get_clock_object_not_instantiated():
     # assert
     assert type(returned_clock) == type(pygame.time.Clock())
     assert id(returned_clock) == id(FpsClock.clock)
-
