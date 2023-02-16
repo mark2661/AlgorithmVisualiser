@@ -18,6 +18,9 @@ def grid():
     return _grid_factory
 
 
+"""*****************************************************************************************************************"""
+
+
 @pytest.mark.parametrize("width, height", [(WIDTH, HEIGHT)])
 def test_add_tiles(grid, width, height):
     """ tests add_tiles method in grid.py.
@@ -43,6 +46,9 @@ def test_add_tiles(grid, width, height):
     assert all(len(group) == 0 for group in [grid.wall_tiles, grid.start_tile, grid.end_tile])
     # check all tiles are correct colour (BLANK_TILE_COLOUR)
     assert all(tile.colour == BLANK_TILE_COLOUR for tile in grid.tiles)
+
+
+"""*****************************************************************************************************************"""
 
 
 @pytest.mark.parametrize("width, height", [(TILE_WIDTH*3, TILE_HEIGHT*3)])
@@ -75,6 +81,9 @@ def test_get_valid_neighbours_center_tile_with_four_valid_neighbours(grid, width
     assert any(tile.rect.topleft == (0, TILE_HEIGHT) for tile in valid_neighbours)  # check left neighbour is present
     assert any(tile.rect.topleft == (2*TILE_WIDTH, TILE_HEIGHT) for tile in valid_neighbours)  # check right neighbour is present
     assert all(tile.colour == BLANK_TILE_COLOUR for tile in valid_neighbours) # check all tiles have correct "colour"
+
+
+"""*****************************************************************************************************************"""
 
 
 @pytest.mark.parametrize("width, height, invalid_neighbours, valid_neighbour_booleans",
@@ -145,4 +154,54 @@ def test_get_valid_neighbours_center_tile_with_three_valid_neighbours(grid, widt
     if valid_neighbour_booleans.get("right", None):
         assert any(tile.rect.topleft == (2*TILE_WIDTH, TILE_HEIGHT) for tile in valid_neighbours)
 
+
+"""*****************************************************************************************************************"""
+
+
+@pytest.mark.parametrize("width, height, include_wall_tiles",
+                         [
+                             pytest.param(TILE_WIDTH * 3, TILE_HEIGHT * 3, False, id="left neighbour not valid"),
+                             pytest.param(TILE_WIDTH * 3, TILE_HEIGHT * 3, True, id="right neighbour not valid")
+                         ])
+def test_reset(grid, width: int, height: int, include_wall_tiles: bool):
+    """
+    test reset method in grid.py
+    the test sets the centre tile of a grid to a wall tile and changes the tile to the appropriate colour.
+    the test checks that all tiles have been reset to "blank tiles" if include_wall_tiles is True. And test wall tiles
+    are left unchanged if include_wall_tiles is False.
+    """
+    # setup
+    grid = grid(width, height)
+
+    top_left_coord_of_center_tile = (((width // TILE_WIDTH) // 2) * TILE_WIDTH,
+                                     ((height // TILE_HEIGHT) // 2) * TILE_HEIGHT)
+
+    test_tile_in_center_of_grid = Tile(top_left_coord_of_center_tile, grid.tiles)
+
+    # turn centre tile into wall tile
+    grid.wall_tiles.add(test_tile_in_center_of_grid)
+    # change centre tile to wall tile colour
+    test_tile_in_center_of_grid.colour = WALL_TILE_COLOUR
+
+    # check all groups have the correct number of tiles
+    assert len(grid.wall_tiles) == 1
+    assert len(grid.start_tile) == 0
+    assert len(grid.end_tile) == 0
+    assert len(grid.tiles) > 0
+
+    # test
+    grid.reset(include_wall_tiles)
+
+    # assert
+    # check the start and end tile groups have been reset
+    assert len(grid.start_tile) == 0
+    assert len(grid.end_tile) == 0
+
+    if include_wall_tiles:
+        assert len(grid.wall_tiles) == 0
+        assert all(tile.colour == BLANK_TILE_COLOUR for tile in grid.tiles)
+
+    else:
+        assert len(grid.wall_tiles) == 1
+        assert all(tile.colour == BLANK_TILE_COLOUR for tile in grid.tiles if tile not in grid.wall_tiles)
 
