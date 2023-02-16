@@ -54,9 +54,18 @@ class Grid:
         for tile in self.tiles:
             if include_wall_tiles:
                 tile.set_colour(BLANK_TILE_COLOUR)
+                if tile in self.wall_tiles:
+                    self.wall_tiles.remove(tile)
+
             else:
                 if tile not in self.wall_tiles:
                     tile.set_colour(BLANK_TILE_COLOUR)
+
+            if tile in self.start_tile:
+                self.start_tile.remove(tile)
+
+            elif tile in self.end_tile:
+                self.end_tile.remove(tile)
 
     def draw(self):
         for tile in self.tiles:
