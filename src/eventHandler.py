@@ -1,6 +1,7 @@
+from __future__ import annotations
 import time
 import pygame
-from grid import Grid
+from src.grid import Grid
 from src.mode import WallMode
 from src.mode import StartMode
 from src.mode import EndMode

@@ -1,10 +1,10 @@
 
 import pygame
 
-from mode import Mode
-from grid import Grid
-from tile import Tile
-from settings import *
+from .mode import Mode
+from src.grid import Grid
+from src.tile import Tile
+from src.settings import *
 
 
 class WallMode(Mode):

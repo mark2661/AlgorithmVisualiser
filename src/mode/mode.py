@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
-from tile import Tile
-
+from __future__ import annotations
 import pygame
-
-from grid import Grid
+from abc import ABC, abstractmethod
+from src.tile import Tile
+from src.grid import Grid
 
 
 class Mode(ABC):

@@ -1,9 +1,9 @@
 import pygame
 
-from tile import Tile
-from mode import Mode
-from grid import Grid
-from settings import *
+from src.tile import Tile
+from .mode import Mode
+from src.grid import Grid
+from src.settings import *
 
 
 class StartMode(Mode):
