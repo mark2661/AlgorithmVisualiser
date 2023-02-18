@@ -57,3 +57,7 @@ def test__change_mode(grid, event_handler, index, result):
 
 
 """*****************************************************************************************************************"""
+
+# currently not sure how to best test this method automatically
+def test_process_event():
+    pass
