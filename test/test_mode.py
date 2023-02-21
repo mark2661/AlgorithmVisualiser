@@ -1,4 +1,6 @@
+from __future__ import annotations
 import pytest
+from typing import Union, Optional
 from unittest import mock
 from src.mode.mode import Mode
 from src.grid import Grid
@@ -67,3 +69,57 @@ def test_get_tile(grid, width, height, mouse_pos, expected_result):
 
 
 """*****************************************************************************************************************"""
+
+
+@pytest.mark.parametrize("width, height, groups",
+                         [
+                             pytest.param(3*TILE_WIDTH, 3*TILE_HEIGHT, set(["tiles"]),
+                                          id="test with group membership: tiles"),
+
+                             pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT, set(["tiles", "wall_tiles"]),
+                                          id="test with group membership: tiles, wall_tiles"),
+
+                             pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT, set(["tiles", "wall_tiles", "start_tile"]),
+                                          id="test with group membership: tiles, wall_tiles, start_tile"),
+
+                             pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT,
+                                          set(["tiles", "wall_tiles", "start_tile", "end_tile"]),
+                                          id="test with group membership: tiles, wall_tiles, start_tile, end_tile")
+                         ])
+def test_remove_tile_from_special_groups(grid, width: Union[int, float], height: Union[int, float],
+                                         groups: set[str]):
+    """
+        test the remove_tile_from_special_groups method in mode.py. The test creates a grid of dimensions width X height
+        (passed as arguments) then selects the center tile object and adds it to the groups in the groups argument.
+        the test checks to see if remove_tile_tile_from_special_groups removes the tile object from ALL
+        the argument member groups EXCEPT for the grid.tiles group.
+    """
+    # setup
+    grid = grid(width, height)
+    # disable the abstract methods dynamically at run time to allow for testing
+    Mode.__abstractmethods__ = set()
+    test_mode = Mode(grid)
+
+    # centre tile of 3X3 grid -> (centre x of central tile, centre y of central tile)
+    test_tile_coords = (((((width // TILE_WIDTH)//2) * TILE_WIDTH) + TILE_WIDTH // 2),
+                        ((((height // TILE_HEIGHT)//2) * TILE_HEIGHT) + TILE_HEIGHT // 2))
+    test_tile = grid.tile_map[test_tile_coords]
+
+    # add tiles to the groups listed in the groups argument
+    for group in groups:
+        exec(f"grid.{group}.add(test_tile)")
+
+    # check if tiles have been added to the groups supplied in the argument
+    for group in groups:
+        assert test_tile in eval(f"grid.{group}")
+
+    # test
+    test_mode.remove_tile_from_special_groups(test_tile)
+
+    # assert
+    for group in groups:
+        if group == "tiles":
+            assert test_tile in grid.tiles
+        else:
+            assert test_tile not in eval(f"grid.{group}")
+
