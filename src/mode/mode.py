@@ -1,6 +1,8 @@
 from __future__ import annotations
 import pygame
 from abc import ABC, abstractmethod
+
+import src.tile
 from src.tile import Tile
 from src.grid import Grid
 

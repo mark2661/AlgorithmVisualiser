@@ -181,8 +181,9 @@ def test_remove_tile_from_special_groups(grid, width: Union[int, float], height:
 def test_cursor_on_tile(grid: Callable, width: Union[int, float], height: Union[int, float],
                         mouse_pos: tuple[Union[int, float], Union[int, float]], expected_result: bool):
     """
-     test _cursor_on_tile method in mode.py. The test checks if the mouse position supplied as an argument lies within/
-     on the bounds of the rect associated with the supplied Tile object.
+     test _cursor_on_tile method in mode.py. The test checks if the method correctly identifies
+     if the mouse position supplied as an argument lies within/on the bounds of the rect associated with the
+     supplied Tile object.
     """
     # setup
     grid: Grid = grid(width, height)
