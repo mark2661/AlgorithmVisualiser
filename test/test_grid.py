@@ -14,7 +14,6 @@ def grid():
     """
     def _grid_factory(width, height):
         return Grid((width, height))
-    print("Making grid")
     return _grid_factory
 
 
