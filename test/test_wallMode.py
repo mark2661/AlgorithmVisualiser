@@ -48,7 +48,6 @@ def test_set_tile(grid: Callable, width: Union[int, float], height: Union[int, f
 
     # setup
     grid: Grid = grid(width, height)
-    print(type(grid))
     test_wall_mode: WallMode = WallMode(grid)
     test_tile: Tile = Tile((0, 0), grid.tiles)
 
@@ -75,5 +74,58 @@ def test_set_tile(grid: Callable, width: Union[int, float], height: Union[int, f
 
     # check the tile colour has been changed to WALL_TILE_COLOUR
     assert test_tile.colour == WALL_TILE_COLOUR
+
+
+"""*****************************************************************************************************************"""
+
+
+@pytest.mark.parametrize("width, height, groups",
+                            [
+                                pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT, set(["tiles", "wall_tiles"]),
+                                             id="tile with group membership: tiles, wall_tiles"),
+
+                                pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT,
+                                             set(["tiles", "wall_tiles", "start_tile"]),
+                                             id="tile with group membership: tiles, start_tile"),
+
+                                pytest.param(3 * TILE_WIDTH, 3 * TILE_HEIGHT,
+                                             set(["tiles", "wall_tiles", "end_tile"]),
+                                             id="tile with group membership: tiles, end_tile"),
+                            ])
+def test_reset_tile(grid: Callable, width: Union[int, float], height: Union[int, float],
+                    groups: set[str]) -> None:
+    """
+    test reset_tile method in src.mode.wallMode.py. The test checks to see if the method removes a tile object
+    from the wall_tiles group ONLY. The test also checks to see if the tile objects colour is correctly reset
+    to BLANK_WALL_TILE colour
+    """
+    # setup
+    grid: Grid = grid(width, height)
+    test_wall_mode: WallMode = WallMode(grid)
+    test_tile: Tile = Tile((0, 0), grid.tiles)
+
+    # add tile object to groups supplied as an argument
+    for group in groups:
+        exec(f"grid.{group}.add(test_tile)")
+
+    # check tile has been added to the argument groups
+    for group in groups:
+        assert test_tile in eval(f"grid.{group}")
+
+    # test
+    assert test_tile in grid.wall_tiles
+    test_wall_mode.reset_tile(test_tile)
+
+    # assert
+    # check tile has been removed grid.wall_tiles group ONLY
+    for group in groups:
+        if group == "wall_tiles":
+            assert test_tile not in eval(f"grid.{group}")
+        else:
+            assert test_tile in eval(f"grid.{group}")
+
+    # check tile colour has been reset to BLANK_TILE_COLOUR from src.settings
+    assert test_tile.colour == BLANK_TILE_COLOUR
+
 
 
